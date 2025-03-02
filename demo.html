@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malefic & Benefic Planets Checker</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        input, select { padding: 10px; margin: 10px; width: 250px; }
+        button { padding: 10px; background-color: blue; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: darkblue; }
+        #result { margin-top: 20px; font-size: 18px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h2>Check Malefic & Benefic Planets</h2>
+
+    <label>Select Lagna (Ascendant):</label>
+    <select id="lagna">
+        <option value="Aries">Aries</option>
+        <option value="Taurus">Taurus</option>
+        <option value="Gemini">Gemini</option>
+        <option value="Cancer">Cancer</option>
+        <option value="Leo">Leo</option>
+        <option value="Virgo">Virgo</option>
+        <option value="Libra">Libra</option>
+        <option value="Scorpio">Scorpio</option>
+        <option value="Sagittarius">Sagittarius</option>
+        <option value="Capricorn">Capricorn</option>
+        <option value="Aquarius">Aquarius</option>
+        <option value="Pisces">Pisces</option>
+    </select><br><br>
+
+    <label>Enter Planet Positions (House-wise, comma separated):</label>
+    <input type="text" id="planetPositions" placeholder="e.g., Sun-1, Moon-4, Saturn-7"><br><br>
+
+    <button onclick="checkPlanets()">Check Planets</button>
+
+    <div id="result"></div>
+
+    <script>
+        function checkPlanets() {
+            let lagna = document.getElementById("lagna").value;
+            let planetData = document.getElementById("planetPositions").value;
+
+            if (!planetData) {
+                document.getElementById("result").innerHTML = "Please enter planetary positions!";
+                return;
+            }
+
+            let beneficMaleficData = {
+                "Aries": { "Benefic": ["Sun", "Jupiter", "Mars"], "Malefic": ["Mercury", "Venus", "Saturn"] },
+                "Taurus": { "Benefic": ["Saturn", "Mercury", "Venus"], "Malefic": ["Mars", "Jupiter", "Sun"] },
+                "Gemini": { "Benefic": ["Mercury", "Venus", "Saturn"], "Malefic": ["Moon", "Mars", "Jupiter"] },
+                "Cancer": { "Benefic": ["Moon", "Mars", "Jupiter"], "Malefic": ["Mercury", "Venus", "Saturn"] },
+                "Leo": { "Benefic": ["Sun", "Mars", "Jupiter"], "Malefic": ["Mercury", "Venus", "Saturn"] },
+                "Virgo": { "Benefic": ["Mercury", "Venus", "Saturn"], "Malefic": ["Sun", "Mars", "Jupiter"] },
+                "Libra": { "Benefic": ["Mercury", "Saturn", "Venus"], "Malefic": ["Sun", "Mars", "Jupiter"] },
+                "Scorpio": { "Benefic": ["Sun", "Moon", "Jupiter"], "Malefic": ["Mercury", "Venus", "Saturn"] },
+                "Sagittarius": { "Benefic": ["Sun", "Mars", "Jupiter"], "Malefic": ["Mercury", "Venus", "Saturn"] },
+                "Capricorn": { "Benefic": ["Mercury", "Venus", "Saturn"], "Malefic": ["Sun", "Mars", "Jupiter"] },
+                "Aquarius": { "Benefic": ["Saturn", "Venus", "Mercury"], "Malefic": ["Sun", "Mars", "Jupiter"] },
+                "Pisces": { "Benefic": ["Moon", "Mars", "Jupiter"], "Malefic": ["Sun", "Mercury", "Venus"] }
+            };
+
+            let beneficPlanets = beneficMaleficData[lagna]["Benefic"];
+            let maleficPlanets = beneficMaleficData[lagna]["Malefic"];
+
+            let userPlanets = planetData.split(",").map(item => item.trim().split("-")[0]);
+
+            let beneficFound = userPlanets.filter(planet => beneficPlanets.includes(planet));
+            let maleficFound = userPlanets.filter(planet => maleficPlanets.includes(planet));
+
+            let resultText = `<strong>For ${lagna} Lagna:</strong><br>`;
+            resultText += `<strong>Benefic Planets in Your Kundli:</strong> ${beneficFound.length ? beneficFound.join(", ") : "None"}<br>`;
+            resultText += `<strong>Malefic Planets in Your Kundli:</strong> ${maleficFound.length ? maleficFound.join(", ") : "None"}`;
+
+            document.getElementById("result").innerHTML = resultText;
+        }
+    </script>
+
+</body>
+</html>
